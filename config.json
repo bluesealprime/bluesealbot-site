@@ -1,0 +1,7 @@
+{
+  "prefix": "^",
+  "logging": true,
+  "anti_raid": false,
+  "ai_moderation": true,
+  "status": "online"
+}
