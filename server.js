@@ -48,7 +48,7 @@ app.get("/callback", async (req, res) => {
 app.get("/api/stats", async (req, res) => {
     try {
         const config = getConfig();
-        const response = await axios.get("https://blue-community-ecge.onrender.com/api/stats", { timeout: 4000 });
+        const response = await axios.get("http://23.137.104.144:2113/api/stats", { timeout: 4000 });
         res.json({
             ...response.data,
             status: config.status || (response.data.online ? 'online' : 'offline')
