@@ -196,7 +196,7 @@
         // Dynamic Stats Synchronization
         async function fetchStats() {
             try {
-                const response = await fetch('https://blue-community-production.up.railway.app/api/stats');
+                const response = await fetch('/api/stats');
                 const data = await response.json();
                 
                 document.getElementById('servers').innerText = (data.servers || 0).toLocaleString() + '+';
