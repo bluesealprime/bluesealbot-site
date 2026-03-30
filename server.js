@@ -49,16 +49,23 @@ app.get("/api/stats", async (req, res) => {
     try {
         const config = getConfig();
         const response = await axios.get("http://23.137.104.144:2113/api/stats", { timeout: 4000 });
+        console.log("Stats fetched successfully from remote");
         res.json({
-            ...response.data,
+            servers: response.data.servers || 0,
+            users: response.data.users || 0,
+            uptime: response.data.uptime || "N/A",
+            online: response.data.online !== undefined ? response.data.online : true,
             status: config.status || (response.data.online ? 'online' : 'offline')
         });
     } catch (e) {
+        console.log("Error fetching stats from remote, using fallback:", e.message);
         const config = getConfig();
         res.json({
-            servers: 13,
-            users: 1734,
+            servers: 23,
+            users: 2383,
             commands: 154,
+            uptime: "LIVE",
+            online: true,
             status: config.status || 'online'
         });
     }

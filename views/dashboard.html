@@ -213,7 +213,7 @@
         <!-- Intelligence (Overview) -->
         <section id="v-intelligence" class="section-view active">
             <header style="margin-bottom: 60px;">
-                <h1 style="font-size: 4rem; weight: 800; margin: 0; letter-spacing: -2px;">Intelligence</h1>
+                <h1 style="font-size: 4rem; font-weight: 800; margin: 0; letter-spacing: -2px;">Intelligence</h1>
                 <p style="color: var(--text-dim); font-size: 1.1rem; margin-top: 15px;">Live neuro-telemetrics from the bot foundation.</p>
             </header>
 
@@ -242,7 +242,7 @@
         <!-- Protocols (Security) -->
         <section id="v-protocols" class="section-view">
             <header style="margin-bottom: 60px;">
-                <h1 style="font-size: 4rem; weight: 800; margin: 0; letter-spacing: -2px;">Protocols</h1>
+                <h1 style="font-size: 4rem; font-weight: 800; margin: 0; letter-spacing: -2px;">Protocols</h1>
                 <p style="color: var(--text-dim); font-size: 1.1rem; margin-top: 15px;">Engage high-security defense mechanisms.</p>
             </header>
 
@@ -270,7 +270,7 @@
         <!-- Moderation -->
         <section id="v-moderation" class="section-view">
             <header style="margin-bottom: 60px;">
-                <h1 style="font-size: 4rem; weight: 800; margin: 0; letter-spacing: -2px;">Moderation</h1>
+                <h1 style="font-size: 4rem; font-weight: 800; margin: 0; letter-spacing: -2px;">Moderation</h1>
                 <p style="color: var(--text-dim); font-size: 1.1rem; margin-top: 15px;">Neural AI content analysis and enforcement.</p>
             </header>
 
@@ -298,7 +298,7 @@
         <!-- Audio Matrix -->
         <section id="v-music" class="section-view">
             <header style="margin-bottom: 60px;">
-                <h1 style="font-size: 4rem; weight: 800; margin: 0; letter-spacing: -2px;">Audio Matrix</h1>
+                <h1 style="font-size: 4rem; font-weight: 800; margin: 0; letter-spacing: -2px;">Audio Matrix</h1>
                 <p style="color: var(--text-dim); font-size: 1.1rem; margin-top: 15px;">High-fidelity Lavalink music systems.</p>
             </header>
 
@@ -326,7 +326,7 @@
         <!-- Systems (Utility) -->
         <section id="v-utility" class="section-view">
             <header style="margin-bottom: 60px;">
-                <h1 style="font-size: 4rem; weight: 800; margin: 0; letter-spacing: -2px;">Systems</h1>
+                <h1 style="font-size: 4rem; font-weight: 800; margin: 0; letter-spacing: -2px;">Systems</h1>
                 <p style="color: var(--text-dim); font-size: 1.1rem; margin-top: 15px;">Global identity and response patterns.</p>
             </header>
 
@@ -357,15 +357,24 @@
         let modified = false;
 
         async function init() {
-            // Stats
-            const stats = await fetch("/api/stats").then(r => r.json());
-            document.getElementById("s-servers").innerText = stats.servers.toLocaleString();
-            document.getElementById("s-users").innerText = stats.users.toLocaleString();
-            document.getElementById("bot-status-text").innerText = stats.status.toUpperCase();
+            try {
+                // Stats
+                const stats = await fetch("/api/stats").then(r => r.json());
+                document.getElementById("s-servers").innerText = (stats.servers || 0).toLocaleString();
+                document.getElementById("s-users").innerText = (stats.users || 0).toLocaleString();
+                document.getElementById("bot-status-text").innerText = (stats.status || "online").toUpperCase();
+                console.log("Dashboard initialized with stats:", stats);
+            } catch (err) {
+                console.error("Dashboard failed to initialize stats:", err);
+            }
 
             // Config
-            localConfig = await fetch("/api/config").then(r => r.json());
-            syncUI();
+            try {
+                localConfig = await fetch("/api/config").then(r => r.json());
+                syncUI();
+            } catch (err) {
+                console.error("Dashboard failed to load config:", err);
+            }
         }
 
         function syncUI() {
