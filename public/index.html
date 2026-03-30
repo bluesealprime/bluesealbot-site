@@ -56,8 +56,8 @@
                 <p>Global Users</p>
             </div>
             <div class="stat-box" data-aos="fade-up" data-aos-delay="200">
-                <h2 id="uptime">--</h2>
-                <p>Current Uptime</p>
+                <h2 id="status">--</h2>
+                <p>System Status</p>
             </div>
         </div>
     </div>
@@ -209,23 +209,17 @@
                     document.getElementById('users').innerText = users.toLocaleString();
                 }
                 
-                // Smart formatting for uptime
-                const uptime = data.uptime;
-                if (typeof uptime === 'number') {
-                    const hours = Math.floor(uptime / 3600);
-                    const minutes = Math.floor((uptime % 3600) / 60);
-                    document.getElementById('uptime').innerText = `${hours}h ${minutes}m`;
-                } else if (uptime) {
-                    document.getElementById('uptime').innerText = uptime;
-                } else {
-                    document.getElementById('uptime').innerText = (data.status === 'online' ? '100%' : '99.9%');
-                }
+                // Status Synchronization
+                const status = data.status || 'online';
+                document.getElementById('status').innerText = status.charAt(0).toUpperCase() + status.slice(1);
+                document.getElementById('status').style.color = (status === 'online' ? '#00E5FF' : '#ff4444');
             } catch (error) {
                 console.error('Error fetching stats:', error);
                 // Fallback realistic stats if backend is down
                 document.getElementById('servers').innerText = '13+';
                 document.getElementById('users').innerText = '1,734';
-                document.getElementById('uptime').innerText = 'Online';
+                document.getElementById('status').innerText = 'Online';
+                document.getElementById('status').style.color = '#00E5FF';
             }
         }
 
