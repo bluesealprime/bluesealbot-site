@@ -76,16 +76,20 @@ app.get("/api/me", async (req, res) => {
     }
 });
 
+// Configuration System
+const BOT_API_URL = process.env.BOT_API_URL || "http://23.137.104.144:2113";
+const DASHBOARD_SECRET = process.env.DASHBOARD_SECRET || "blueseal_secure_access_2026";
+
 // Bot Stats API
 app.get("/api/stats", async (req, res) => {
     try {
         const config = getConfig();
-        const targetURL = "http://23.137.104.144:2113/api/stats";
-        const response = await axios.get(targetURL, { timeout: 8000 });
+        const response = await axios.get(`${BOT_API_URL}/api/stats`, { timeout: 8000 });
         console.log("Stats fetched successfully from remote");
         res.json({
             servers: response.data.servers || 0,
             users: response.data.users || 0,
+            commands: response.data.commands || 0,
             uptime: response.data.uptime || "N/A",
             online: response.data.online !== undefined ? response.data.online : true,
             status: response.data.status || config.status || 'online'
@@ -125,10 +129,8 @@ app.get("/api/guilds", async (req, res) => {
 
 app.get("/api/antinuke/:guildId", async (req, res) => {
     try {
-        const BOT_API = "http://23.137.104.144:2113/api/control/antinuke";
-        const SECRET = process.env.DASHBOARD_SECRET || "blueseal_secure_access_2026";
-        const response = await axios.get(`${BOT_API}/${req.params.guildId}`, {
-            headers: { 'x-dashboard-secret': SECRET }
+        const response = await axios.get(`${BOT_API_URL}/api/control/antinuke/${req.params.guildId}`, {
+            headers: { 'x-dashboard-secret': DASHBOARD_SECRET }
         });
         res.json(response.data);
     } catch (e) {
@@ -138,10 +140,8 @@ app.get("/api/antinuke/:guildId", async (req, res) => {
 
 app.get("/api/module/:name/:guildId", async (req, res) => {
     try {
-        const BOT_API = "http://23.137.104.144:2113/api/control/module";
-        const SECRET = process.env.DASHBOARD_SECRET || "blueseal_secure_access_2026";
-        const response = await axios.get(`${BOT_API}/${req.params.name}/${req.params.guildId}`, {
-            headers: { 'x-dashboard-secret': SECRET }
+        const response = await axios.get(`${BOT_API_URL}/api/control/module/${req.params.name}/${req.params.guildId}`, {
+            headers: { 'x-dashboard-secret': DASHBOARD_SECRET }
         });
         res.json(response.data);
     } catch (e) {
@@ -151,10 +151,8 @@ app.get("/api/module/:name/:guildId", async (req, res) => {
 
 app.post("/api/module/:name/:guildId", async (req, res) => {
     try {
-        const BOT_API = "http://23.137.104.144:2113/api/control/module";
-        const SECRET = process.env.DASHBOARD_SECRET || "blueseal_secure_access_2026";
-        const response = await axios.post(`${BOT_API}/${req.params.name}/${req.params.guildId}`, req.body, {
-            headers: { 'x-dashboard-secret': SECRET }
+        const response = await axios.post(`${BOT_API_URL}/api/control/module/${req.params.name}/${req.params.guildId}`, req.body, {
+            headers: { 'x-dashboard-secret': DASHBOARD_SECRET }
         });
         res.json(response.data);
     } catch (e) {
@@ -177,14 +175,11 @@ app.post("/api/config", async (req, res) => {
         fs.writeFileSync("./config.json", JSON.stringify(newConfig, null, 2))
         
         // Propagate to Bot
-        const BOT_API = "http://23.137.104.144:2113/api/control";
-        const SECRET = process.env.DASHBOARD_SECRET || "blueseal_secure_access_2026";
-        
-        const headers = { 'x-dashboard-secret': SECRET };
+        const headers = { 'x-dashboard-secret': DASHBOARD_SECRET };
         
         await Promise.all([
-            axios.post(`${BOT_API}/prefix`, { prefix: newConfig.prefix }, { headers }).catch(e => console.log("Prefix sync failed")),
-            axios.post(`${BOT_API}/status`, { status: newConfig.status }, { headers }).catch(e => console.log("Status sync failed"))
+            axios.post(`${BOT_API_URL}/api/control/prefix`, { prefix: newConfig.prefix }, { headers }).catch(e => console.log("Prefix sync failed")),
+            axios.post(`${BOT_API_URL}/api/control/status`, { status: newConfig.status }, { headers }).catch(e => console.log("Status sync failed"))
         ]);
 
         res.json({ success: true, message: "Protocol Upgraded & Synced" })
@@ -195,12 +190,10 @@ app.post("/api/config", async (req, res) => {
 
 app.post("/api/antinuke/:guildId", async (req, res) => {
     try {
-        const BOT_API = "http://23.137.104.144:2113/api/control/antinuke";
-        const SECRET = process.env.DASHBOARD_SECRET || "blueseal_secure_access_2026";
-        const response = await axios.post(`${BOT_API}/${req.params.guildId}`, {
+        const response = await axios.post(`${BOT_API_URL}/api/control/antinuke/${req.params.guildId}`, {
             settings: req.body
         }, {
-            headers: { 'x-dashboard-secret': SECRET }
+            headers: { 'x-dashboard-secret': DASHBOARD_SECRET }
         });
         res.json(response.data);
     } catch (e) {
@@ -208,5 +201,5 @@ app.post("/api/antinuke/:guildId", async (req, res) => {
     }
 });
 
-const PORT = 3000
+const PORT = process.env.PORT || 3000
 app.listen(PORT, () => console.log(`Blue Seal Intelligence running on port ${PORT}`))
