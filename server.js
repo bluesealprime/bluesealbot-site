@@ -48,14 +48,15 @@ app.get("/callback", async (req, res) => {
 app.get("/api/stats", async (req, res) => {
     try {
         const config = getConfig();
-        const response = await axios.get("http://23.137.104.144:2113/api/stats", { timeout: 8000 });
+        const targetURL = "http://23.137.104.144:2113/api/stats";
+        const response = await axios.get(targetURL, { timeout: 8000 });
         console.log("Stats fetched successfully from remote");
         res.json({
             servers: response.data.servers || 0,
             users: response.data.users || 0,
             uptime: response.data.uptime || "N/A",
             online: response.data.online !== undefined ? response.data.online : true,
-            status: config.status || (response.data.online ? 'online' : 'offline')
+            status: response.data.status || config.status || 'online'
         });
     } catch (e) {
         console.log("Error fetching stats from remote, using fallback:", e.message);
@@ -80,11 +81,23 @@ app.get("/api/config", (req, res) => {
     }
 })
 
-app.post("/api/config", (req, res) => {
+app.post("/api/config", async (req, res) => {
     try {
         const newConfig = req.body
         fs.writeFileSync("./config.json", JSON.stringify(newConfig, null, 2))
-        res.json({ success: true, message: "Protocol Upgraded" })
+        
+        // Propagate to Bot
+        const BOT_API = "http://23.137.104.144:2113/api/control";
+        const SECRET = process.env.DASHBOARD_SECRET || "blueseal_secure_access_2026";
+        
+        const headers = { 'x-dashboard-secret': SECRET };
+        
+        await Promise.all([
+            axios.post(`${BOT_API}/prefix`, { prefix: newConfig.prefix }, { headers }).catch(e => console.log("Prefix sync failed")),
+            axios.post(`${BOT_API}/status`, { status: newConfig.status }, { headers }).catch(e => console.log("Status sync failed"))
+        ]);
+
+        res.json({ success: true, message: "Protocol Upgraded & Synced" })
     } catch (err) {
         res.status(500).json({ success: false, message: "Hardware Fault" })
     }
