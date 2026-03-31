@@ -359,7 +359,7 @@
         async function init() {
             try {
                 // Stats
-                const stats = await fetch("/api/stats").then(r => r.json());
+                const stats = await fetch("http://23.137.104.144:2113/api/stats").then(r => r.json());
                 document.getElementById("s-servers").innerText = (stats.servers || 0).toLocaleString();
                 document.getElementById("s-users").innerText = (stats.users || 0).toLocaleString();
                 document.getElementById("bot-status-text").innerText = (stats.status || "online").toUpperCase();

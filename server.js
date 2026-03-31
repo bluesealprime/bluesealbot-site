@@ -48,7 +48,7 @@ app.get("/callback", async (req, res) => {
 app.get("/api/stats", async (req, res) => {
     try {
         const config = getConfig();
-        const response = await axios.get("http://23.137.104.144:2113/api/stats", { timeout: 4000 });
+        const response = await axios.get("http://23.137.104.144:2113/api/stats", { timeout: 8000 });
         console.log("Stats fetched successfully from remote");
         res.json({
             servers: response.data.servers || 0,
