@@ -10,8 +10,9 @@ app.use(express.json())
 app.use(express.static("public"))
 
 const CLIENT_ID = "1477618724533043293"
-const CLIENT_SECRET = process.env.CLIENT_SECRET
-const REDIRECT_URI = process.env.REDIRECT_URI
+const CLIENT_SECRET = process.env.CLIENT_SECRET || "C1D1rlhnWO0-1Dnm_23uToX4DIwQbGrI" 
+const REDIRECT_URI = process.env.REDIRECT_URI || "http://localhost:3000/callback"
+const BOT_OWNER_ID = "783953632974471178"; // Derived from bot source E:\Blue Community\src\config.js
 
 // Helper to read config
 const getConfig = () => JSON.parse(fs.readFileSync("./config.json", "utf-8"))
@@ -21,7 +22,7 @@ app.get("/", (req, res) => {
 })
 
 app.get("/login", (req, res) => {
-    const url = `https://discord.com/oauth2/authorize?client_id=${CLIENT_ID}&response_type=code&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=identify%20guilds`
+    const url = `https://discord.com/oauth2/authorize?client_id=${CLIENT_ID}&response_type=code&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=identify+guilds`
     res.redirect(url)
 })
 
@@ -35,14 +36,45 @@ app.get("/callback", async (req, res) => {
             code: code,
             redirect_uri: REDIRECT_URI
         })
-        const token = await axios.post("https://discord.com/api/oauth2/token", params, {
+        const tokenRes = await axios.post("https://discord.com/api/oauth2/token", params, {
             headers: { "Content-Type": "application/x-www-form-urlencoded" }
         })
-        res.sendFile(path.join(__dirname, "views/dashboard.html"))
+        const accessToken = tokenRes.data.access_token;
+        
+        // Fetch user info to verify identity
+        const userRes = await axios.get("https://discord.com/api/users/@me", {
+            headers: { Authorization: `Bearer ${accessToken}` }
+        });
+        
+        const userData = userRes.data;
+        const isOwner = userData.id === BOT_OWNER_ID;
+        
+        // Return dashboard with token and role as query params (or use sessions in a real app)
+        // For simplicity in this static-serve setup, we'll embed them
+        res.redirect(`/dashboard?token=${accessToken}&role=${isOwner ? 'owner' : 'user'}`);
     } catch (err) {
         res.status(500).send("Login failed")
     }
 })
+
+app.get("/dashboard", (req, res) => {
+    res.sendFile(path.join(__dirname, "views/dashboard.html"))
+})
+
+app.get("/api/me", async (req, res) => {
+    const token = req.headers.authorization?.split(" ")[1];
+    if (!token) return res.status(401).json({ error: "Unauthorized" });
+    
+    try {
+        const userRes = await axios.get("https://discord.com/api/users/@me", {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        const isOwner = userRes.data.id === BOT_OWNER_ID;
+        res.json({ ...userRes.data, isOwner });
+    } catch (e) {
+        res.status(401).json({ error: "Invalid token" });
+    }
+});
 
 // Bot Stats API
 app.get("/api/stats", async (req, res) => {
@@ -69,6 +101,64 @@ app.get("/api/stats", async (req, res) => {
             online: true,
             status: config.status || 'online'
         });
+    }
+});
+
+// Proxy to fetch bot's current guilds
+app.get("/api/guilds", async (req, res) => {
+    const token = req.headers.authorization?.split(" ")[1];
+    if (!token) return res.status(401).json({ error: "Unauthorized" });
+
+    try {
+        // We get the list of guilds the USER is in from Discord
+        const discordRes = await axios.get("https://discord.com/api/users/@me/guilds", {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        
+        // Mark guilds where user has MANAGE_GUILD (0x20)
+        const managedGuilds = discordRes.data.filter(g => (g.permissions & 0x20) === 0x20);
+        res.json(managedGuilds);
+    } catch (e) {
+        res.status(500).json({ error: "Failed to fetch guilds" });
+    }
+});
+
+app.get("/api/antinuke/:guildId", async (req, res) => {
+    try {
+        const BOT_API = "http://23.137.104.144:2113/api/control/antinuke";
+        const SECRET = process.env.DASHBOARD_SECRET || "blueseal_secure_access_2026";
+        const response = await axios.get(`${BOT_API}/${req.params.guildId}`, {
+            headers: { 'x-dashboard-secret': SECRET }
+        });
+        res.json(response.data);
+    } catch (e) {
+        res.status(500).json({ error: "Bot offline or unreachable" });
+    }
+});
+
+app.get("/api/module/:name/:guildId", async (req, res) => {
+    try {
+        const BOT_API = "http://23.137.104.144:2113/api/control/module";
+        const SECRET = process.env.DASHBOARD_SECRET || "blueseal_secure_access_2026";
+        const response = await axios.get(`${BOT_API}/${req.params.name}/${req.params.guildId}`, {
+            headers: { 'x-dashboard-secret': SECRET }
+        });
+        res.json(response.data);
+    } catch (e) {
+        res.status(500).json({ error: "Failed to fetch module data" });
+    }
+});
+
+app.post("/api/module/:name/:guildId", async (req, res) => {
+    try {
+        const BOT_API = "http://23.137.104.144:2113/api/control/module";
+        const SECRET = process.env.DASHBOARD_SECRET || "blueseal_secure_access_2026";
+        const response = await axios.post(`${BOT_API}/${req.params.name}/${req.params.guildId}`, req.body, {
+            headers: { 'x-dashboard-secret': SECRET }
+        });
+        res.json(response.data);
+    } catch (e) {
+        res.status(500).json({ error: "Failed to update module" });
     }
 });
 
@@ -102,6 +192,21 @@ app.post("/api/config", async (req, res) => {
         res.status(500).json({ success: false, message: "Hardware Fault" })
     }
 })
+
+app.post("/api/antinuke/:guildId", async (req, res) => {
+    try {
+        const BOT_API = "http://23.137.104.144:2113/api/control/antinuke";
+        const SECRET = process.env.DASHBOARD_SECRET || "blueseal_secure_access_2026";
+        const response = await axios.post(`${BOT_API}/${req.params.guildId}`, {
+            settings: req.body
+        }, {
+            headers: { 'x-dashboard-secret': SECRET }
+        });
+        res.json(response.data);
+    } catch (e) {
+        res.status(500).json({ error: "Sync failed" });
+    }
+});
 
 const PORT = 3000
 app.listen(PORT, () => console.log(`Blue Seal Intelligence running on port ${PORT}`))

@@ -182,9 +182,12 @@
 <body>
 
     <aside class="sidebar">
-        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 60px;">
-            <div style="width: 32px; height: 32px; background: var(--primary); border-radius: 10px; box-shadow: 0 0 25px rgba(0, 229, 255, 0.4);"></div>
-            <span style="font-weight: 800; letter-spacing: 3px; font-size: 1.2rem;">BLUE SEAL</span>
+        <div style="display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 60px;">
+            <div style="position: relative; margin-bottom: 20px;">
+                <div style="position: absolute; inset: -10px; background: var(--primary); filter: blur(25px); opacity: 0.3; border-radius: 50%;"></div>
+                <img src="/img/seal.jpg" alt="Blue Seal" style="width: 100px; height: 100px; border-radius: 28px; border: 2px solid var(--primary); position: relative; z-index: 1; box-shadow: 0 0 40px rgba(0, 229, 255, 0.25);">
+            </div>
+            <span style="font-weight: 800; letter-spacing: 5px; font-size: 1.4rem; color: #fff;">BLUE SEAL</span>
         </div>
 
         <div class="nav-group">
@@ -193,13 +196,36 @@
             <div onclick="switchView('protocols')" id="l-protocols" class="nav-link"><i data-lucide="shield"></i> Protocols</div>
         </div>
 
-        <div class="nav-group">
-            <div class="nav-label">MODULAR ARSAY</div>
-            <div onclick="switchView('moderation')" id="l-moderation" class="nav-link"><i data-lucide="shield-alert"></i> Moderation</div>
-            <div onclick="switchView('music')" id="l-music" class="nav-link"><i data-lucide="music-4"></i> Audio Matrix</div>
-            <div onclick="switchView('utility')" id="l-utility" class="nav-link"><i data-lucide="terminal"></i> Systems</div>
+        <div id="owner-tools" class="nav-group" style="display: none;">
+            <div class="nav-label">SUPREME COMMAND (OWNER)</div>
+            <div onclick="switchView('utility')" id="l-utility" class="nav-link"><i data-lucide="terminal"></i> Global Systems</div>
         </div>
 
+        <div class="nav-group">
+            <div class="nav-label">MODULAR ARSAY</div>
+            <div onclick="switchView('welcome')" id="l-welcome" class="nav-link"><i data-lucide="hand-metal"></i> Greetings</div>
+            <div onclick="switchView('moderation')" id="l-moderation" class="nav-link"><i data-lucide="shield-alert"></i> Moderation</div>
+            <div onclick="switchView('logging')" id="l-logging" class="nav-link"><i data-lucide="scroll"></i> Intel Logs</div>
+            <div onclick="switchView('pulse')" id="l-pulse" class="nav-link"><i data-lucide="activity"></i> Pulse Monitor</div>
+            <div onclick="switchView('music')" id="l-music" class="nav-link"><i data-lucide="music-4"></i> Audio Matrix</div>
+            <div onclick="switchView('autoresponder')" id="l-autoresponder" class="nav-link"><i data-lucide="message-square"></i> Auto-Response</div>
+            <div onclick="switchView('tickets')" id="l-tickets" class="nav-link"><i data-lucide="layout-grid"></i> Support Grid</div>
+            <div onclick="switchView('verify')" id="l-verify" class="nav-link"><i data-lucide="user-check"></i> Verification</div>
+            <div onclick="switchView('autoroles')" id="l-autoroles" class="nav-link"><i data-lucide="user-plus"></i> Auto-Roles</div>
+        </div>
+
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <img id="user-avatar" src="" style="width: 32px; height: 32px; border-radius: 50%; display: none;">
+                    <div>
+                        <div id="user-tag" style="font-weight: 700; font-size: 0.8rem;">Loading...</div>
+                        <div id="user-role-label" style="font-size: 0.6rem; color: var(--primary); letter-spacing: 1px;">AUTHENTICATING</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div style="margin-top: 20px; padding: 25px; background: rgba(255,255,255,0.02); border-radius: 20px; border: 1px solid var(--border);">
             <div style="display: flex; align-items: center; justify-content: space-between;">
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <div id="status-dot-sidebar" style="width: 8px; height: 8px; background: var(--primary); border-radius: 50%; box-shadow: 0 0 10px var(--primary);"></div>
@@ -219,51 +245,54 @@
                 <p style="color: var(--text-dim); font-size: 1.1rem; margin-top: 15px;">Live neuro-telemetrics from the bot foundation.</p>
             </header>
 
-            <div class="stat-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 50px;">
+            <div class="stat-grid" style="grid-template-columns: repeat(4, 1fr); margin-bottom: 50px;">
                 <div class="stat-card">
                     <i data-lucide="network" class="stat-icon"></i>
                     <div class="stat-label">Global Nodes</div>
-                    <div class="stat-value" id="s-servers">120</div>
+                    <div class="stat-value" id="s-servers">...</div>
                     <div class="stat-meta">SERVERS CONNECTED</div>
                 </div>
                 <div class="stat-card">
                     <i data-lucide="users" class="stat-icon" style="color: #a855f7;"></i>
                     <div class="stat-label">Neural Connections</div>
-                    <div class="stat-value" id="s-users">43,000</div>
+                    <div class="stat-value" id="s-users">...</div>
                     <div class="stat-meta">ACTIVE ENTITIES</div>
                 </div>
                 <div class="stat-card">
-                    <i data-lucide="zap" class="stat-icon" style="color: #fbbf24;"></i>
-                    <div class="stat-label">Execution Efficiency</div>
-                    <div class="stat-value">99.9%</div>
-                    <div class="stat-meta">STABLE LATENCY</div>
+                    <i data-lucide="terminal" class="stat-icon" style="color: #ec4899;"></i>
+                    <div class="stat-label">Function Registry</div>
+                    <div class="stat-value" id="s-commands">154</div>
+                    <div class="stat-meta">HYPER-COMMANDS</div>
+                </div>
+                <div class="stat-card">
+                    <i data-lucide="clock" class="stat-icon" style="color: #fbbf24;"></i>
+                    <div class="stat-label">System Continuity</div>
+                    <div class="stat-value" id="s-uptime">LIVE</div>
+                    <div class="stat-meta">CURRENT UPTIME</div>
                 </div>
             </div>
         </section>
 
         <!-- Protocols (Security) -->
         <section id="v-protocols" class="section-view">
-            <header style="margin-bottom: 60px;">
-                <h1 style="font-size: 4rem; font-weight: 800; margin: 0; letter-spacing: -2px;">Protocols</h1>
-                <p style="color: var(--text-dim); font-size: 1.1rem; margin-top: 15px;">Engage high-security defense mechanisms.</p>
+            <header style="margin-bottom: 60px; display: flex; justify-content: space-between; align-items: flex-end;">
+                <div>
+                    <h1 style="font-size: 4rem; font-weight: 800; margin: 0; letter-spacing: -2px;">Protocols</h1>
+                    <p style="color: var(--text-dim); font-size: 1.1rem; margin-top: 15px;">Configure sector-specific anti-nuke defensive frameworks.</p>
+                </div>
+                <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border); padding: 15px 25px; border-radius: 20px;">
+                    <div style="font-size: 0.6rem; color: var(--text-dim); letter-spacing: 2px; font-weight: 800; margin-bottom: 10px;">TARGET SECTOR</div>
+                    <select id="guild-selector" onchange="loadGuildSettings(this.value)" style="background: none; border: none; color: #fff; font-weight: 700; outline: none; cursor: pointer; font-family: inherit; font-size: 1rem;">
+                        <option value="" style="background: #000;">Select Server</option>
+                    </select>
+                </div>
             </header>
 
-            <div class="glass-card">
-                <h2 style="margin-bottom: 40px; font-weight: 700; color: var(--primary);">Anti-Nuke Systems</h2>
-                <div class="module-grid">
-                    <div class="module-item">
-                        <div>
-                            <div style="font-weight: 700;">Anti-Raid Engagement</div>
-                            <div style="font-size: 0.8rem; color: var(--text-dim); margin-top: 5px;">Auto-lock server on mass join.</div>
-                        </div>
-                        <div id="t-anti_raid" onclick="updateConfig('anti_raid')" class="toggle-switch"></div>
-                    </div>
-                    <div class="module-item">
-                        <div>
-                            <div style="font-weight: 700;">Ban Threshold</div>
-                            <div style="font-size: 0.8rem; color: var(--text-dim); margin-top: 5px;">Limit bot ban speed.</div>
-                        </div>
-                        <div id="t-ban_limit" onclick="updateConfig('ban_limit')" class="toggle-switch"></div>
+            <div id="antinuke-controls" style="opacity: 0.3; pointer-events: none;">
+                <div class="glass-card">
+                    <h2 style="margin-bottom: 40px; font-weight: 700; color: var(--primary);">Anti-Nuke Matrix</h2>
+                    <div class="module-grid" id="protocol-grid">
+                        <!-- Dynamic Flags -->
                     </div>
                 </div>
             </div>
@@ -276,23 +305,61 @@
                 <p style="color: var(--text-dim); font-size: 1.1rem; margin-top: 15px;">Neural AI content analysis and enforcement.</p>
             </header>
 
-            <div class="glass-card">
+            <div id="automod-controls" class="glass-card" style="opacity: 0.3; pointer-events: none;">
                 <h2 style="margin-bottom: 40px; font-weight: 700; color: #f472b6;">Auto-Moderation</h2>
+                <div class="module-grid" id="automod-grid">
+                    <!-- Automod Toggles -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Welcome (New) -->
+        <section id="v-welcome" class="section-view">
+            <header style="margin-bottom: 60px;">
+                <h1 style="font-size: 4rem; font-weight: 800; margin: 0; letter-spacing: -2px;">Greetings</h1>
+                <p style="color: var(--text-dim); font-size: 1.1rem; margin-top: 15px;">Configure premium entry protocols.</p>
+            </header>
+
+            <div id="welcome-controls" class="glass-card" style="opacity: 0.3; pointer-events: none;">
                 <div class="module-grid">
-                    <div class="module-item">
-                        <div>
-                            <div style="font-weight: 700;">AI Sentiment Analysis</div>
-                            <div style="font-size: 0.8rem; color: var(--text-dim); margin-top: 5px;">Scan for harmful intent.</div>
+                    <div class="module-item" style="grid-column: span 2;">
+                        <div style="width: 100%;">
+                            <div style="font-weight: 700;">Welcome message</div>
+                            <textarea id="wel-msg" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: #fff; padding: 15px; border-radius: 15px; margin-top: 10px; font-family: inherit; resize: vertical;" placeholder="Welcome {user} to {guild}!"></textarea>
                         </div>
-                        <div id="t-ai_moderation" onclick="updateConfig('ai_moderation')" class="toggle-switch"></div>
                     </div>
                     <div class="module-item">
                         <div>
-                            <div style="font-weight: 700;">Spam Suppression</div>
-                            <div style="font-size: 0.8rem; color: var(--text-dim); margin-top: 5px;">Limit message bursts.</div>
+                            <div style="font-weight: 700;">Background Image (URL)</div>
+                            <input id="wel-img" type="text" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: #fff; padding: 10px; border-radius: 10px; width: 100%; margin-top: 5px;">
                         </div>
-                        <div id="t-spam_filter" onclick="updateConfig('spam_filter')" class="toggle-switch"></div>
                     </div>
+                    <div class="module-item">
+                        <div>
+                            <div style="font-weight: 700;">Private DM Greet</div>
+                            <div style="font-size: 0.8rem; color: var(--text-dim);">Send a direct message on join.</div>
+                        </div>
+                        <div id="t-wel-dm" onclick="toggleWelcomeDM()" class="toggle-switch"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Logging -->
+        <section id="v-logging" class="section-view">
+            <header style="margin-bottom: 60px;">
+                <h1 style="font-size: 4rem; font-weight: 800; margin: 0; letter-spacing: -2px;">Intel Logs</h1>
+                <p style="color: var(--text-dim); font-size: 1.1rem; margin-top: 15px;">Targeted sector surveillance and event tracking.</p>
+            </header>
+
+            <div id="logging-controls" class="glass-card" style="opacity: 0.3; pointer-events: none;">
+                <h2 style="margin-bottom: 40px; font-weight: 700; color: #22c55e;">Log Distribution Matrix</h2>
+                <div class="module-grid" id="logging-grid">
+                    <!-- Dynamic Log Toggles -->
+                </div>
+                <div style="margin-top: 30px; display: flex; gap: 20px;">
+                    <button onclick="triggerAutoset('logs')" class="stat-meta" style="background: rgba(0, 229, 255, 0.1); border: 1px solid var(--primary); color: var(--primary); padding: 12px 24px; border-radius: 12px; cursor: pointer;">INITIALIZE AUTO-LOGGING</button>
+                    <button onclick="triggerAutoset('remove')" class="stat-meta" style="background: rgba(255, 68, 68, 0.1); border: 1px solid #ff4444; color: #ff4444; padding: 12px 24px; border-radius: 12px; cursor: pointer;">PURGE LOG SECTOR</button>
                 </div>
             </div>
         </section>
@@ -304,23 +371,136 @@
                 <p style="color: var(--text-dim); font-size: 1.1rem; margin-top: 15px;">High-fidelity Lavalink music systems.</p>
             </header>
 
-            <div class="glass-card">
-                <h2 style="margin-bottom: 40px; font-weight: 700; color: #a855f7;">Lavalink Integrated</h2>
+            <div id="music-controls" class="glass-card" style="opacity: 0.3; pointer-events: none;">
+                <h2 style="margin-bottom: 40px; font-weight: 700; color: #a855f7;">Lavalink Core</h2>
                 <div class="module-grid">
                     <div class="module-item">
                         <div>
-                            <div style="font-weight: 700;">24/7 Voice Lock</div>
-                            <div style="font-size: 0.8rem; color: var(--text-dim); margin-top: 5px;">Keep bot in channel permanently.</div>
+                            <div style="font-weight: 700;">24/7 Connectivity</div>
+                            <div style="font-size: 0.8rem; color: var(--text-dim); margin-top: 5px;">Maintain permanent voice presence.</div>
                         </div>
-                        <div id="t-voice_247" onclick="updateConfig('voice_247')" class="toggle-switch"></div>
+                        <div id="t-m-voice_247" class="toggle-switch"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Autoresponder -->
+        <section id="v-autoresponder" class="section-view">
+            <header style="margin-bottom: 60px;">
+                <h1 style="font-size: 4rem; font-weight: 800; margin: 0; letter-spacing: -2px;">Auto-Response</h1>
+                <p style="color: var(--text-dim); font-size: 1.1rem; margin-top: 15px;">Automated keyword-based interaction patterns.</p>
+            </header>
+
+            <div id="autoresponder-controls" class="glass-card" style="opacity: 0.3; pointer-events: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                    <h2 style="font-weight: 700; color: var(--primary); margin: 0;">Trigger Matrix</h2>
+                    <button onclick="addAutoresponder()" style="background: var(--primary); border: none; color: #000; padding: 10px 20px; border-radius: 12px; font-weight: 800; cursor: pointer;">+ ADD PATTERN</button>
+                </div>
+                <div id="autoresponder-list" style="display: flex; flex-direction: column; gap: 15px;">
+                    <!-- Autoresponders -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Support Grid (Tickets) -->
+        <section id="v-tickets" class="section-view">
+            <header style="margin-bottom: 60px;">
+                <h1 style="font-size: 4rem; font-weight: 800; margin: 0; letter-spacing: -2px;">Support Grid</h1>
+                <p style="color: var(--text-dim); font-size: 1.1rem; margin-top: 15px;">Configure enterprise-grade ticket assistance.</p>
+            </header>
+
+            <div id="tickets-controls" class="glass-card" style="opacity: 0.3; pointer-events: none;">
+                <div class="module-grid">
+                    <div class="module-item">
+                        <div style="width: 100%;">
+                            <div style="font-weight: 700;">Panel Heading</div>
+                            <input id="tick-heading" type="text" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: #fff; padding: 10px; border-radius: 10px; width: 100%; margin-top: 5px;">
+                        </div>
                     </div>
                     <div class="module-item">
-                        <div>
-                            <div style="font-weight: 700;">Ultra-HD Filters</div>
-                            <div style="font-size: 0.8rem; color: var(--text-dim); margin-top: 5px;">Enable Bassboost & Nightcore.</div>
+                        <div style="width: 100%;">
+                            <div style="font-weight: 700;">Panel Description</div>
+                            <input id="tick-desc" type="text" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: #fff; padding: 10px; border-radius: 10px; width: 100%; margin-top: 5px;">
                         </div>
-                        <div id="t-music_filters" onclick="updateConfig('music_filters')" class="toggle-switch"></div>
                     </div>
+                    <div class="module-item">
+                        <div style="width: 100%;">
+                            <div style="font-weight: 700;">Panel Channel ID</div>
+                            <input id="tick-channel" type="text" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: #fff; padding: 10px; border-radius: 10px; width: 100%; margin-top: 5px;">
+                        </div>
+                    </div>
+                    <div class="module-item">
+                        <div style="width: 100%;">
+                            <div style="font-weight: 700;">Category ID</div>
+                            <input id="tick-category" type="text" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: #fff; padding: 10px; border-radius: 10px; width: 100%; margin-top: 5px;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Verification -->
+        <section id="v-verify" class="section-view">
+            <header style="margin-bottom: 60px;">
+                <h1 style="font-size: 4rem; font-weight: 800; margin: 0; letter-spacing: -2px;">Verification</h1>
+                <p style="color: var(--text-dim); font-size: 1.1rem; margin-top: 15px;">Secure sector entry protocols.</p>
+            </header>
+
+            <div id="verify-controls" class="glass-card" style="opacity: 0.3; pointer-events: none;">
+                <div class="module-grid">
+                    <div class="module-item">
+                        <div style="width: 100%;">
+                            <div style="font-weight: 700;">Verified Role ID</div>
+                            <input id="ver-role" type="text" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: #fff; padding: 10px; border-radius: 10px; width: 100%; margin-top: 5px;">
+                        </div>
+                    </div>
+                    <div class="module-item">
+                        <div style="width: 100%;">
+                            <div style="font-weight: 700;">Verification Channel ID</div>
+                            <input id="ver-channel" type="text" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: #fff; padding: 10px; border-radius: 10px; width: 100%; margin-top: 5px;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Auto-Roles -->
+        <section id="v-autoroles" class="section-view">
+            <header style="margin-bottom: 60px;">
+                <h1 style="font-size: 4rem; font-weight: 800; margin: 0; letter-spacing: -2px;">Auto-Roles</h1>
+                <p style="color: var(--text-dim); font-size: 1.1rem; margin-top: 15px;">Automated role assignment on join.</p>
+            </header>
+
+            <div id="autoroles-controls" class="glass-card" style="opacity: 0.3; pointer-events: none;">
+                <div class="module-grid">
+                    <div class="module-item">
+                        <div style="width: 100%;">
+                            <div style="font-weight: 700;">Human Roles (IDs, comma-separated)</div>
+                            <input id="ar-human" type="text" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: #fff; padding: 10px; border-radius: 10px; width: 100%; margin-top: 5px;">
+                        </div>
+                    </div>
+                    <div class="module-item">
+                        <div style="width: 100%;">
+                            <div style="font-weight: 700;">Bot Roles (IDs, comma-separated)</div>
+                            <input id="ar-bot" type="text" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: #fff; padding: 10px; border-radius: 10px; width: 100%; margin-top: 5px;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pulse Monitor -->
+        <section id="v-pulse" class="section-view">
+            <header style="margin-bottom: 60px;">
+                <h1 style="font-size: 4rem; font-weight: 800; margin: 0; letter-spacing: -2px;">Pulse Monitor</h1>
+                <p style="color: var(--text-dim); font-size: 1.1rem; margin-top: 15px;">Live neural activity and event telemetry.</p>
+            </header>
+
+            <div id="pulse-controls" class="glass-card" style="opacity: 0.3; pointer-events: none;">
+                <h2 style="margin-bottom: 40px; font-weight: 700; color: #00e5ff;">Activity Stream</h2>
+                <div id="pulse-list" style="display: flex; flex-direction: column; gap: 10px;">
+                    <!-- Pulse Logs -->
                 </div>
             </div>
         </section>
@@ -342,18 +522,6 @@
                         </div>
                         <input id="in-prefix" type="text" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: #fff; padding: 10px 20px; border-radius: 12px; font-weight: 800; width: 60px; text-align: center; font-size: 1.1rem;">
                     </div>
-                    <div class="module-item">
-                        <div>
-                            <div style="font-weight: 700;">Presence Status</div>
-                            <div style="font-size: 0.8rem; color: var(--text-dim); margin-top: 5px;">Bot's global visibility state.</div>
-                        </div>
-                        <select id="in-status" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: #fff; padding: 10px 15px; border-radius: 12px; font-weight: 800; outline: none; cursor: pointer;">
-                            <option value="online" style="background: #000;">ONLINE</option>
-                            <option value="idle" style="background: #000;">IDLE</option>
-                            <option value="dnd" style="background: #000;">DND</option>
-                            <option value="invisible" style="background: #000;">OFFLINE</option>
-                        </select>
-                    </div>
                 </div>
             </div>
         </section>
@@ -368,34 +536,356 @@
     <script>
         lucide.createIcons();
         let localConfig = {};
+        let currentGuildSettings = {};
+        let currentAutomod = {};
+        let currentWelcome = {};
+        let currentLogging = {};
+        let currentTickets = {};
+        let currentVerify = {};
+        let currentAutoroles = {};
+        let currentAutoresponders = [];
+        let currentPulse = [];
         let modified = false;
+        let activeModule = 'intelligence';
+        let userToken = new URLSearchParams(window.location.search).get("token");
+        let selectedGuildId = null;
 
         async function init() {
+            if (!userToken) {
+                window.location.href = "/login";
+                return;
+            }
+
+            // User Info
             try {
-                // Stats
+                const me = await fetch("/api/me", {
+                    headers: { Authorization: `Bearer ${userToken}` }
+                }).then(r => r.json());
+                
+                if (me.error) throw new Error("Session expired");
+                
+                document.getElementById("user-tag").innerText = (me.global_name || me.username).toUpperCase();
+                if (me.avatar) {
+                    document.getElementById("user-avatar").src = `https://cdn.discordapp.com/avatars/${me.id}/${me.avatar}.png`;
+                    document.getElementById("user-avatar").style.display = "block";
+                }
+                document.getElementById("user-role-label").innerText = me.isOwner ? "SUPREME OWNER" : "SERVER OPERATOR";
+                
+                if (me.isOwner) {
+                    document.getElementById("owner-tools").style.display = "block";
+                }
+
+                // Load Guilds
+                const guilds = await fetch("/api/guilds", {
+                    headers: { Authorization: `Bearer ${userToken}` }
+                }).then(r => r.json());
+                
+                const selector = document.getElementById("guild-selector");
+                guilds.forEach(g => {
+                    const opt = document.createElement("option");
+                    opt.value = g.id;
+                    opt.innerText = g.name.toUpperCase();
+                    opt.style.background = "#000";
+                    selector.appendChild(opt);
+                });
+
+            } catch (err) {
+                window.location.href = "/login";
+            }
+
+            try {
                 const stats = await fetch("/api/stats").then(r => r.json());
                 document.getElementById("s-servers").innerText = (stats.servers || 0).toLocaleString();
                 document.getElementById("s-users").innerText = (stats.users || 0).toLocaleString();
+                document.getElementById("s-commands").innerText = (stats.commands || 154).toLocaleString();
+                document.getElementById("s-uptime").innerText = (stats.uptime || "LIVE").toUpperCase();
                 document.getElementById("bot-status-text").innerText = (stats.status || "online").toUpperCase();
-                console.log("Dashboard initialized with stats:", stats);
-            } catch (err) {
-                console.error("Dashboard failed to initialize stats:", err);
-            }
+                updateStatusDot(stats.status || "online");
+            } catch (err) {}
 
-            // Config
             try {
                 localConfig = await fetch("/api/config").then(r => r.json());
-                syncUI();
-            } catch (err) {
-                console.error("Dashboard failed to load config:", err);
-            }
+                syncGlobalUI();
+            } catch (err) {}
         }
 
-        function syncUI() {
-            Object.keys(localConfig).forEach(key => {
-                const el = document.getElementById("t-" + key);
-                if (el) el.className = localConfig[key] ? "toggle-switch active" : "toggle-switch";
+        async function loadGuildSettings(guildId) {
+            if (!guildId) return;
+            selectedGuildId = guildId;
+            
+            // Background load all relevant modules for current guild
+            const [antRes, autoRes, welRes, logRes, tickRes, verRes, arRes, respRes, pulseRes] = await Promise.all([
+                fetch(`/api/antinuke/${guildId}`).then(r => r.json()),
+                fetch(`/api/module/automod/${guildId}`).then(r => r.json()),
+                fetch(`/api/module/welcome/${guildId}`).then(r => r.json()),
+                fetch(`/api/module/logging/${guildId}`).then(r => r.json()),
+                fetch(`/api/module/tickets/${guildId}`).then(r => r.json()),
+                fetch(`/api/module/verify/${guildId}`).then(r => r.json()),
+                fetch(`/api/module/autoroles/${guildId}`).then(r => r.json()),
+                fetch(`/api/module/autoresponder/${guildId}`).then(r => r.json()),
+                fetch(`/api/module/pulse/${guildId}`).then(r => r.json())
+            ]);
+
+            currentGuildSettings = antRes;
+            currentAutomod = autoRes;
+            currentWelcome = welRes;
+            currentLogging = logRes;
+            currentTickets = tickRes;
+            currentVerify = verRes;
+            currentAutoroles = arRes;
+            currentAutoresponders = respRes;
+            currentPulse = pulseRes;
+
+            renderProtocolGrid();
+            renderAutomodGrid();
+            renderLoggingGrid();
+            renderAutoresponderList();
+            renderPulseList();
+            syncWelcomeUI();
+            syncTicketsUI();
+            syncVerifyUI();
+            syncAutorolesUI();
+
+            document.querySelectorAll("[id$='-controls']").forEach(el => {
+                el.style.opacity = "1";
+                el.style.pointerEvents = "all";
             });
+        }
+
+        function renderAutoresponderList() {
+            const list = document.getElementById("autoresponder-list");
+            list.innerHTML = "";
+            currentAutoresponders.forEach((ar, index) => {
+                const item = document.createElement("div");
+                item.className = "module-item";
+                item.style.flexDirection = "column";
+                item.style.alignItems = "stretch";
+                item.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <input type="text" value="${ar.trigger_id}" oninput="updateAR(${index}, 'trigger_id', this.value)" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: #fff; padding: 8px; border-radius: 8px; width: 45%; font-weight: 700;" placeholder="Trigger">
+                        <button onclick="removeAR(${index})" style="background: rgba(255,68,68,0.1); border: 1px solid #ff4444; color: #ff4444; padding: 5px 10px; border-radius: 8px; cursor: pointer;">REMOVE</button>
+                    </div>
+                    <textarea oninput="updateAR(${index}, 'response_text', this.value)" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: #fff; padding: 10px; border-radius: 8px; width: 100%; height: 60px; resize: none;" placeholder="Response...">${ar.response_text}</textarea>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        function addAutoresponder() {
+            currentAutoresponders.push({ trigger_id: "", response_text: "", is_mention: true });
+            renderAutoresponderList();
+            modified = true;
+            document.getElementById("save-banner").style.display = "flex";
+        }
+
+        function updateAR(index, key, val) {
+            currentAutoresponders[index][key] = val;
+            modified = true;
+            document.getElementById("save-banner").style.display = "flex";
+        }
+
+        function removeAR(index) {
+            currentAutoresponders.splice(index, 1);
+            renderAutoresponderList();
+            modified = true;
+            document.getElementById("save-banner").style.display = "flex";
+        }
+
+        function syncTicketsUI() {
+            document.getElementById("tick-heading").value = currentTickets.heading || "";
+            document.getElementById("tick-desc").value = currentTickets.description || "";
+            document.getElementById("tick-channel").value = currentTickets.panel_channel_id || "";
+            document.getElementById("tick-category").value = currentTickets.category_id || "";
+        }
+
+        function syncVerifyUI() {
+            document.getElementById("ver-role").value = currentVerify.role_id || "";
+            document.getElementById("ver-channel").value = currentVerify.channel_id || "";
+        }
+
+        function syncAutorolesUI() {
+            document.getElementById("ar-human").value = (currentAutoroles.human_roles || []).join(", ");
+            document.getElementById("ar-bot").value = (currentAutoroles.bot_roles || []).join(", ");
+        }
+
+        // Add event listeners for new inputs
+        ["tick-heading", "tick-desc", "tick-channel", "tick-category"].forEach(id => {
+            document.getElementById(id).addEventListener("input", (e) => {
+                const keyMap = { "tick-heading": "heading", "tick-desc": "description", "tick-channel": "panel_channel_id", "tick-category": "category_id" };
+                currentTickets[keyMap[id]] = e.target.value;
+                modified = true;
+                document.getElementById("save-banner").style.display = "flex";
+            });
+        });
+
+        ["ver-role", "ver-channel"].forEach(id => {
+            document.getElementById(id).addEventListener("input", (e) => {
+                const keyMap = { "ver-role": "role_id", "ver-channel": "channel_id" };
+                currentVerify[keyMap[id]] = e.target.value;
+                modified = true;
+                document.getElementById("save-banner").style.display = "flex";
+            });
+        });
+
+        ["ar-human", "ar-bot"].forEach(id => {
+            document.getElementById(id).addEventListener("input", (e) => {
+                const key = id === "ar-human" ? "human_roles" : "bot_roles";
+                currentAutoroles[key] = e.target.value.split(",").map(v => v.trim()).filter(v => v);
+                modified = true;
+                document.getElementById("save-banner").style.display = "flex";
+            });
+        });
+
+        const LOG_TYPES = ["message", "mod", "verify", "security", "server", "member", "action", "channel", "raid", "antinuke", "ban", "joins", "leaves"];
+
+        function renderLoggingGrid() {
+            const grid = document.getElementById("logging-grid");
+            if (!grid) return;
+            grid.innerHTML = "";
+            LOG_TYPES.forEach(type => {
+                const chanId = currentLogging[type];
+                const item = document.createElement("div");
+                item.className = "module-item";
+                item.innerHTML = `
+                    <div>
+                        <div style="font-weight: 700; text-transform: uppercase;">${type.replace('_', ' ')} Intel</div>
+                        <div style="font-size: 0.7rem; color: var(--text-dim); margin-top: 5px;">Tracking operational data stream.</div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div style="font-size: 0.6rem; color: ${chanId ? 'var(--primary)' : 'var(--text-dim)'}; font-weight: 800;">${chanId ? 'ACTIVE' : 'IDLE'}</div>
+                        <div class="toggle-switch ${chanId ? 'active' : ''}" onclick="toggleLogType('${type}')"></div>
+                    </div>
+                `;
+                grid.appendChild(item);
+            });
+        }
+
+        function toggleLogType(type) {
+            // This is a UI-only toggle for now, in a real app this would prompt for a channel ID
+            // For now, let's just toggle 'null' or 'active' mock
+            currentLogging[type] = currentLogging[type] ? null : "manual_set";
+            renderLoggingGrid();
+            modified = true;
+            document.getElementById("save-banner").style.display = "flex";
+        }
+
+        async function triggerAutoset(action) {
+            if (!selectedGuildId) return;
+            alert(`Sychronizing with sector hardware: AUTOSET_${action.toUpperCase()} initiated.`);
+            // In a real app, this would call a POST /api/autoset endpoint on your server
+        }
+
+        function renderAutomodGrid() {
+            const grid = document.getElementById("automod-grid");
+            if (!grid) return;
+            grid.innerHTML = "";
+            const features = [
+                { id: "anti_spam", name: "Anti Spam" },
+                { id: "anti_links", name: "Anti Links" },
+                { id: "anti_profanity", name: "Anti Profanity" },
+                { id: "anti_nsfw", name: "Anti NSFW" }
+            ];
+            features.forEach(f => {
+                const isEnabled = currentAutomod[f.id]?.enabled || false;
+                const item = document.createElement("div");
+                item.className = "module-item";
+                item.innerHTML = `
+                    <div>
+                        <div style="font-weight: 700;">${f.name}</div>
+                        <div style="font-size: 0.8rem; color: var(--text-dim); margin-top: 5px;">Automated enforcement protocol.</div>
+                    </div>
+                    <div class="toggle-switch ${isEnabled ? 'active' : ''}" onclick="toggleAutomod('${f.id}')"></div>
+                `;
+                grid.appendChild(item);
+            });
+        }
+
+        function toggleAutomod(id) {
+            if (!currentAutomod[id]) currentAutomod[id] = { enabled: false };
+            currentAutomod[id].enabled = !currentAutomod[id].enabled;
+            renderAutomodGrid();
+            modified = true;
+            document.getElementById("save-banner").style.display = "flex";
+        }
+
+        function renderPulseList() {
+            const list = document.getElementById("pulse-list");
+            list.innerHTML = "";
+            if (!currentPulse || currentPulse.length === 0) {
+                list.innerHTML = "<div style='color: var(--text-dim); text-align: center; padding: 40px;'>NO NEURAL DATA DETECTED IN THIS SECTOR</div>";
+                return;
+            }
+            currentPulse.forEach(log => {
+                const item = document.createElement("div");
+                item.className = "module-item";
+                item.style.padding = "15px 25px";
+                item.innerHTML = `
+                    <div style="display: flex; gap: 15px; align-items: center;">
+                        <div style="width: 8px; height: 8px; background: #00e5ff; border-radius: 50%;"></div>
+                        <div>
+                            <div style="font-weight: 700; font-size: 0.9rem;">${log.type.toUpperCase()}</div>
+                            <div style="font-size: 0.75rem; color: var(--text-dim);">${JSON.stringify(log.content).substring(0, 80)}...</div>
+                        </div>
+                    </div>
+                    <div style="font-size: 0.7rem; color: var(--text-dim); font-weight: 800;">${new Date(log.createdAt).toLocaleTimeString()}</div>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        function toggleWelcomeDM() {
+            currentWelcome.welcome_dm = !currentWelcome.welcome_dm;
+            syncWelcomeUI();
+            modified = true;
+            document.getElementById("save-banner").style.display = "flex";
+        }
+
+        document.getElementById("wel-msg").addEventListener("input", (e) => {
+            currentWelcome.welcome_message = e.target.value;
+            modified = true;
+            document.getElementById("save-banner").style.display = "flex";
+        });
+
+        document.getElementById("wel-img").addEventListener("input", (e) => {
+            currentWelcome.welcome_image = e.target.value;
+            modified = true;
+            document.getElementById("save-banner").style.display = "flex";
+        });
+
+        const PROTOCOLS = [
+            { id: "mass_ban", name: "Anti Mass Ban", desc: "Prevents bulk user bans." },
+            { id: "mass_kick", name: "Anti Mass Kick", desc: "Terminates mass kick attempts." },
+            { id: "anti_bot_add", name: "Anti Bot Add", desc: "Blocks unauthorized bot invites." },
+            { id: "anti_link", name: "Anti Link", desc: "Global link suppression." },
+            { id: "autorestore", name: "Auto-Restore", desc: "Revert channel/role changes." },
+            { id: "auto_lockdown", name: "Panic Lockdown", desc: "Auto-lock server on threat." }
+        ];
+
+        function renderProtocolGrid() {
+            const grid = document.getElementById("protocol-grid");
+            grid.innerHTML = "";
+            PROTOCOLS.forEach(p => {
+                const item = document.createElement("div");
+                item.className = "module-item";
+                item.innerHTML = `
+                    <div>
+                        <div style="font-weight: 700;">${p.name}</div>
+                        <div style="font-size: 0.8rem; color: var(--text-dim); margin-top: 5px;">${p.desc}</div>
+                    </div>
+                    <div id="an-${p.id}" onclick="toggleGuildFlag('${p.id}')" class="toggle-switch ${currentGuildSettings[p.id] ? 'active' : ''}"></div>
+                `;
+                grid.appendChild(item);
+            });
+        }
+
+        function toggleGuildFlag(flag) {
+            currentGuildSettings[flag] = !currentGuildSettings[flag];
+            renderProtocolGrid();
+            modified = true;
+            document.getElementById("save-banner").style.display = "flex";
+        }
+
+        function syncGlobalUI() {
             document.getElementById("in-prefix").value = localConfig.prefix || "!";
             if (localConfig.status) {
                 document.getElementById("in-status").value = localConfig.status;
@@ -417,7 +907,7 @@
         function updateConfig(key) {
             localConfig[key] = !localConfig[key];
             modified = true;
-            syncUI();
+            syncGlobalUI();
             document.getElementById("save-banner").style.display = "flex";
         }
 
@@ -435,22 +925,86 @@
         });
 
         async function commitChanges() {
-            const res = await fetch("/api/config", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(localConfig)
-            });
-            const data = await res.json();
-            if (data.success) {
-                document.getElementById("save-banner").style.display = "none";
-                modified = false;
-                // Subtle feedback
-                const b = document.getElementById("save-banner");
-                alert("PROTOCOLS UPGRADED SUCCESSFULLY");
+            const loaders = [];
+
+            // Save Global
+            if (activeModule === 'utility') {
+                loaders.push(fetch("/api/config", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(localConfig)
+                }));
             }
+
+            // Save Guild Modules
+            if (selectedGuildId) {
+                if (activeModule === 'protocols') {
+                    loaders.push(fetch(`/api/antinuke/${selectedGuildId}`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(currentGuildSettings)
+                    }));
+                }
+                if (activeModule === 'moderation') {
+                    loaders.push(fetch(`/api/module/automod/${selectedGuildId}`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(currentAutomod)
+                    }));
+                }
+                if (activeModule === 'welcome') {
+                    loaders.push(fetch(`/api/module/welcome/${selectedGuildId}`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(currentWelcome)
+                    }));
+                }
+                if (activeModule === 'logging') {
+                    loaders.push(fetch(`/api/module/logging/${selectedGuildId}`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(currentLogging)
+                    }));
+                }
+                if (activeModule === 'autoresponder') {
+                    loaders.push(fetch(`/api/module/autoresponder/${selectedGuildId}`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(currentAutoresponders)
+                    }));
+                }
+                if (activeModule === 'tickets') {
+                    loaders.push(fetch(`/api/module/tickets/${selectedGuildId}`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(currentTickets)
+                    }));
+                }
+                if (activeModule === 'verify') {
+                    loaders.push(fetch(`/api/module/verify/${selectedGuildId}`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(currentVerify)
+                    }));
+                }
+                if (activeModule === 'autoroles') {
+                    loaders.push(fetch(`/api/module/autoroles/${selectedGuildId}`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(currentAutoroles)
+                    }));
+                }
+            }
+
+            await Promise.all(loaders);
+
+            document.getElementById("save-banner").style.display = "none";
+            modified = false;
+            alert("ALL MODULES SYNCHRONIZED ACROSS ARCHITECTURE");
         }
 
         function switchView(id) {
+            activeModule = id;
             document.querySelectorAll(".section-view").forEach(v => v.classList.remove("active"));
             document.querySelectorAll(".nav-link").forEach(l => l.classList.remove("active"));
             
