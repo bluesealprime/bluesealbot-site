@@ -1,19 +1,24 @@
 export async function onRequest({ request }) {
     try {
-        const response = await fetch("http://23.137.104.144:2113/api/stats");
+        const response = await fetch("https://api.codetabs.com/v1/proxy?quest=http://23.137.104.144:2113/api/stats");
+        console.log("Proxy response status:", response.status);
         if (!response.ok) {
             throw new Error(`HTTP Error: ${response.status}`);
         }
         const data = await response.json();
+        console.log("Raw stats received:", data);
         
         // Map the payload identical to how server.js operates to ensure 1:1 compatibility
-        return new Response(JSON.stringify({
+        const finalData = {
             servers: data.servers || 0,
             users: data.users || 0,
             uptime: data.uptime || "N/A",
             online: data.online !== undefined ? data.online : true,
             status: data.online ? 'online' : 'offline'
-        }), {
+        };
+        console.log("Final mapped data:", finalData);
+
+        return new Response(JSON.stringify(finalData), {
             headers: {
                 "Content-Type": "application/json",
                 "Access-Control-Allow-Origin": "*"
